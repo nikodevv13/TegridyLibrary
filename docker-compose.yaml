@@ -1,0 +1,28 @@
+﻿name: TegridyLibrary
+
+volumes:
+  TegridyLibrary-database-volume:
+networks:
+  TegridyLibrary-network:
+    driver: bridge
+
+services:
+  db:
+    container_name: TegridyLibrary.database
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P Tegridy@2050! -Q 'SELECT 1'"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Tegridy@2050!"
+    volumes:
+      - TegridyLibrary-database-volume:/var/opt/mssql
+    networks:
+      - TegridyLibrary-network
