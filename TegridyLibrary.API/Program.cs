@@ -50,6 +50,8 @@ app.UseCors(corsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseStaticFiles();
 app.MapLibraryEndpoints();
+app.MapFallbackToFile("index.html");
 
 app.Run();
