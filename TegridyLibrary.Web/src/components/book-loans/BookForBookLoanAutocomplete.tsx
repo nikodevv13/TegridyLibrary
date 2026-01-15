@@ -93,7 +93,7 @@ export default function BookForBookLoanAutocomplete({
                                                 setIsOpen(false);
                                             }}
                                         >
-                                            {copy.inventoryNumber}
+                                            {copy.inventoryNumber} - {book.title}
                                             <Check
                                                 className={cn(
                                                     "ml-auto",
