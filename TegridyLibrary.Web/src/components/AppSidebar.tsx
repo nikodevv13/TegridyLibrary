@@ -4,7 +4,7 @@ import {
     SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
 } from "@/components/ui/sidebar.tsx"
 import {
-    Book, BookUser,
+    Book, BookUser, ChartNetwork,
     Command, Landmark, ListTree, Map, UserCog, UserPen,
 } from "lucide-react";
 import {LayoutNav} from "@/components/LayoutNav.tsx";
@@ -22,7 +22,11 @@ export default function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>)
                 email: librarian!.email,
             },
             mainNav: [],
-            managementNav: [],
+            managementNav: [{
+                name: "Analytics",
+                url: "/management/analytics",
+                icon: ChartNetwork,
+            }],
         }
 
         if (permissionsCache.canManageBooks) {

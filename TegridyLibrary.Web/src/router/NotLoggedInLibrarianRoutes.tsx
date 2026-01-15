@@ -6,7 +6,7 @@ function NotLoggedInLibrariansRoutes() {
 
   return !isLoggedIn
     ? <Outlet />
-    : <Navigate to="/management" />
+    : <Navigate to="/management/analytics" />
 }
 
 export default NotLoggedInLibrariansRoutes;

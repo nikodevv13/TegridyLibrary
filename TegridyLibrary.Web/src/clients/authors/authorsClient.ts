@@ -16,7 +16,7 @@ async function deleteAuthor(authorId: string) {
 }
 
 async function getAuthors() {
-    return axiosClient<AuthorReadModel[]>(`/api/authors`);
+    return axiosClient.get<AuthorReadModel[]>(`/api/authors`);
 }
 
 const authorsClient = {

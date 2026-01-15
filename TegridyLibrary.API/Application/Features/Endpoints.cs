@@ -1,4 +1,5 @@
-﻿using TegridyLibrary.API.Application.Features.Authors;
+﻿using TegridyLibrary.API.Application.Features.Analytics;
+using TegridyLibrary.API.Application.Features.Authors;
 using TegridyLibrary.API.Application.Features.BookLoans;
 using TegridyLibrary.API.Application.Features.Books;
 using TegridyLibrary.API.Application.Features.Genres;
@@ -76,5 +77,10 @@ internal static class Endpoints
         bookLoansGroup.Map<GetPaginatedBookLoansEndpoint>();
         bookLoansGroup.Map<GetPaginatedBooksForBookLoanCreationEndpoint>();
         bookLoansGroup.Map<CompleteBookLoanEndpoint>();
+        
+        var analytics = apiGroup.MapGroup("analytics")
+            .WithTags("Analytics");
+        
+        analytics.Map<GetGlobalAnalyticsEndpoint>();
     }
 }

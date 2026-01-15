@@ -9,6 +9,7 @@ var configuration = builder.Configuration;
 var services = builder.Services;
 
 services.AddInfrastructure(configuration);
+builder.Services.AddValidation();
 
 const string corsPolicyName = "TegridyLibraryCors";
 builder.Services.AddCors(options =>
@@ -32,18 +33,15 @@ services.AddOpenApi(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference("/docs", options => options
-        .WithTitle("CADR API")
-        .WithTheme(ScalarTheme.Default)
-        .EnableDarkMode()
-        .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Axios)
-        .WithDocumentDownloadType(DocumentDownloadType.Both)
-        .WithDotNetFlag()
-        .ExpandAllTags());
-}
+app.MapOpenApi();
+app.MapScalarApiReference("/docs", options => options
+    .WithTitle("CADR API")
+    .WithTheme(ScalarTheme.Default)
+    .EnableDarkMode()
+    .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Axios)
+    .WithDocumentDownloadType(DocumentDownloadType.Both)
+    .WithDotNetFlag()
+    .ExpandAllTags());
 
 app.UseCors(corsPolicyName);
 

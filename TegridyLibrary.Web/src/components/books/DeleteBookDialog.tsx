@@ -24,7 +24,7 @@ export function DeleteBookDialog({book}: DeleteBookDialogProps) {
     const {mutateAsync, isPending, isError, error} = useMutation({
         mutationFn: () => booksClient.deleteBook(book.id),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({queryKey: ['books']})
+            await queryClient.invalidateQueries({queryKey: ['book-summaries']})
         }
     });
 

@@ -2,7 +2,7 @@ import {redirect} from "react-router";
 import useApp from "@/hooks/useApp.ts";
 
 export function redirectToHomePage() {
-  return redirect('/management');
+  return redirect('/management/analytics');
 }
 
 export function redirectToLoginPage() {
