@@ -12,8 +12,8 @@ using TegridyLibrary.API.Infrastructure.Database;
 namespace TegridyLibrary.API.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20260103163113_AdjustRequireds")]
-    partial class AdjustRequireds
+    [Migration("20260115163553_MergeMigrations")]
+    partial class MergeMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,11 +130,54 @@ namespace TegridyLibrary.API.Infrastructure.Database.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
                     b.ToTable("BookCopies", "Library");
+                });
+
+            modelBuilder.Entity("TegridyLibrary.API.Application.Entities.BookLoan", b =>
+                {
+                    b.Property<decimal>("Id")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<decimal>("BookCopyId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("CompletedByLibrarianId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<decimal>("ReaderId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTime>("StartedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<decimal>("StartedByLibrarianId")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookCopyId");
+
+                    b.HasIndex("CompletedByLibrarianId");
+
+                    b.HasIndex("ReaderId");
+
+                    b.HasIndex("StartedByLibrarianId");
+
+                    b.ToTable("BookLoans", "Library");
                 });
 
             modelBuilder.Entity("TegridyLibrary.API.Application.Entities.Genre", b =>
@@ -262,16 +305,57 @@ namespace TegridyLibrary.API.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("TegridyLibrary.API.Application.Entities.BookCopy", b =>
                 {
-                    b.HasOne("TegridyLibrary.API.Application.Entities.Book", null)
+                    b.HasOne("TegridyLibrary.API.Application.Entities.Book", "Book")
                         .WithMany("Copies")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("TegridyLibrary.API.Application.Entities.BookLoan", b =>
+                {
+                    b.HasOne("TegridyLibrary.API.Application.Entities.BookCopy", "BookCopy")
+                        .WithMany("Loans")
+                        .HasForeignKey("BookCopyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TegridyLibrary.API.Application.Entities.Users.Librarian", "CompletedByLibrarian")
+                        .WithMany()
+                        .HasForeignKey("CompletedByLibrarianId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TegridyLibrary.API.Application.Entities.Users.Reader", "Reader")
+                        .WithMany()
+                        .HasForeignKey("ReaderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TegridyLibrary.API.Application.Entities.Users.Librarian", "StartedByLibrarian")
+                        .WithMany()
+                        .HasForeignKey("StartedByLibrarianId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BookCopy");
+
+                    b.Navigation("CompletedByLibrarian");
+
+                    b.Navigation("Reader");
+
+                    b.Navigation("StartedByLibrarian");
                 });
 
             modelBuilder.Entity("TegridyLibrary.API.Application.Entities.Book", b =>
                 {
                     b.Navigation("Copies");
+                });
+
+            modelBuilder.Entity("TegridyLibrary.API.Application.Entities.BookCopy", b =>
+                {
+                    b.Navigation("Loans");
                 });
 #pragma warning restore 612, 618
         }
